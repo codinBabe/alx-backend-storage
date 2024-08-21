@@ -5,7 +5,6 @@
 -- country, enumeration of countries: US, CO and TN, never null 
 -- (= default will be the first element of the enumeration, here US)
 -- if table already exists, script should not fail
-
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
