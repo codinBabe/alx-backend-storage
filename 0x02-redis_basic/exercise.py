@@ -6,6 +6,7 @@ import uuid
 from typing import Callable, Any, Union
 from functools import wraps
 
+
 def count_calls(method: Callable) -> Callable:
     """returns a Callable"""
     key = method.__qualname__
@@ -32,6 +33,7 @@ def call_history(method: Callable) -> Callable:
 
     return wrapper
 
+
 def replay(fn: Callable) -> None:
     """Display the history of calls of a particular function."""
     red = redis.Redis()
@@ -57,10 +59,9 @@ def replay(fn: Callable) -> None:
         print("{}(*{}) -> {}".format(func_name, input_val, output_val))
 
 
-
 class Cache:
     """A simple implementation of a Redis cache."""
-    def __init__(self)-> None:
+    def __init__(self) -> None:
         """Initialize the Cache object."""
         self._redis = redis.Redis()
         self._redis.flushdb(True)
@@ -72,17 +73,17 @@ class Cache:
         key = str(uuid.uuid4())
         self._redis.set(key, data)
         return key
-    
+
     def get(self, key: str, fn: Callable = None) -> Union[str, bytes, float, int]:
-        """Retrieve the data from Redis and apply the conversion function if provided."""
+        """Retrieve the data from Redis and apply the
+        conversion function if provided."""
         data = self._redis.get(key)
         return fn(data) if fn is not None else data
-    
+
     def get_str(self, key: str) -> str:
         """Retrieve the data from Redis and convert it to a string."""
         return self.get(key, lambda d: d.decode("utf-8"))
-    
+
     def get_int(self, key: str) -> int:
         """Retrieve the data from Redis and convert it to an integer."""
         return self.get(key, lambda d: int(d))
-
