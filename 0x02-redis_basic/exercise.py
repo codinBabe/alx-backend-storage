@@ -45,7 +45,7 @@ def replay(fn: Callable) -> None:
     inputs = red.lrange("{}:inputs".format(func_name), 0, -1)
     outputs = red.lrange("{}:outputs".format(func_name), 0, -1)
 
-    for i, input_val in zip(inputs, outputs):
+    for input_val, output_val in zip(inputs, outputs):
         try:
             input_val = input_val.decode('utf-8')
         except Exception:
@@ -65,6 +65,8 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb(True)
 
+    @count_calls
+    @call_history
     def store(self, data: Union[str, bytes, float, int]) -> str:
         """Store the input data in Redis and return the key."""
         key = str(uuid.uuid4())
